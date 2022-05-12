@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Note</title>
+</head>
+<body>
+<dl>
+    <dt>Заголовок</dt>
+    <dd>{{object.title}}</dd>
+    <dt>Содержимое заметки</dt>
+    <dd>{{object.content}}</dd>
+    <dt>Дата создания</dt>
+    <dd>{{object.created_at}}</dd>
+    <dt>Дата Изменения</dt>
+    <dd>{{object.updated_at}}</dd>
+    <dt>Категория заметок</dt>
+    <dd>{{object.category}}</dd>
+    <dt>Избранное</dt>
+    <dd>{{object.is_favorite | yesno }}</dd>
+</dl>
+</body>
+</html>

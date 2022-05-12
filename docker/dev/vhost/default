@@ -1,0 +1,16 @@
+location ~ ^/(rest-auth|api|admin|note|__debug__)/ {
+    proxy_pass http://django_bars;
+}
+
+location ~ /static/(admin|rest_framework)/ {
+    expires 1w;
+    add_header Cache-Control "public";
+    proxy_pass http://django_bars;
+    include uwsgi_params;
+}
+location ~ /media/ {
+    expires 1w;
+    add_header Cache-Control "public";
+    proxy_pass http://django_bars;
+    include uwsgi_params;
+}

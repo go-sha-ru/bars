@@ -1,0 +1,47 @@
+version: '2'
+services:
+  nginx:
+    image: jwilder/nginx-proxy
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - ./vhost:/etc/nginx/vhost.d
+      - ./proxy.conf:/etc/nginx/proxy.conf
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    depends_on:
+      - django_bars
+      - vue
+
+  django_base:
+    build: ../../
+    image: bars/django
+    environment:
+      - DJANGO_SETTINGS_MODULE=bars.settings.dev
+    volumes:
+      - ../../:/django_project
+      - ../../fixtures:/fixtures
+
+  django_bars:
+    extends:
+      service: django_base
+    command: python manage.py runserver 0.0.0.0:8002
+    expose:
+      - "8002"
+    environment:
+      - VIRTUAL_HOST=django_bars
+
+  vue:
+    build:
+      context: ../../frontend/
+      dockerfile: Dockerfile
+    image: bars/frontend
+    command: npm run serve
+#    command: bash
+    expose:
+      - "8080"
+    volumes:
+      - ../../frontend:/frontend
+      - /frontend/node_modules
+      - ../../frontend/node_modules:/mnt/node_modules
+    environment:
+      VIRTUAL_HOST: local.bars.ru
